@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    environment:
+      - OPENAI_KEY=${OPENAI_KEY}
+      - OPENAI_KEY2=${OPENAI_KEY2}
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - PROMPT=${PROMPT}
+    volumes:
+      - ./voice:/app/voice
+      - ./ready:/app/ready
+    restart: always
