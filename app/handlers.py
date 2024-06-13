@@ -11,7 +11,7 @@ router = Router()
 
 @router.message(Command('start'))
 async def handle_start(message: types.Message):
-    await message.answer("Вас приветствует тех поддержка строительной компании O2 Development!\nМенеджер ответит на все ваши вопросы")
+    await message.answer("Вас приветствует Hilma Pro!")
 
 
 @router.message(F.voice)
