@@ -1,6 +1,7 @@
 import os
 import uuid
-import asyncio
+from aiogram.types import FSInputFile
+from gtts import gTTS
 from aiogram import types, Router, F
 from aiogram.filters import Command
 from app.speech import recognise, convert_voice
@@ -38,11 +39,24 @@ async def handle_voice(message: types.Message):
         text = "Ошибка создания файла. Пожалуйста, попробуйте ещё раз."
     
     response = await gpt_clear(text)
-    await message.answer(response)
+    print('CHAT GPT: ',response)
+
+    audio_filename = f"./ready/{filename}.mp3"
+    tts = gTTS(response, lang='ru')
+    tts.save(audio_filename)
+    
+    if os.path.exists(audio_filename):
+        audio = FSInputFile(audio_filename)
+        await message.answer_voice(audio)
+        os.remove(audio_filename)
+    else:
+        await message.answer("Ошибка при создании аудиофайла. Пожалуйста, попробуйте ещё раз.")
 
 
 @router.message(F.text)
 async def handle_text(message: types.Message):
     user_text = message.text
+    print('USER: ', user_text)
     response = await gpt_clear(user_text)
+    print('CHAT GPT: ', response)
     await message.answer(response)
